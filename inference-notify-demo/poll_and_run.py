@@ -68,20 +68,24 @@ def run_command(command):
     return process.stdout
 
 def build_inference_command(params: dict) -> list[str]:
-    """Builds the command to execute the inference script from notification parameters."""
+    """
+    Builds the command to execute the remote inference script from detailed
+    notification parameters.
+    """
+    # Base command using the remote script URL
     cmd = ["uv", "run", "https://raw.githubusercontent.com/gegedenice/LLM-notify/main/inference-notify-demo/inference.py"]
-    # Required parameters
-    cmd.extend(["--provider", params["provider"]])
-    cmd.extend(["--model", params["model"]])
-    cmd.extend(["--user-prompt", params["user_prompt"]])
 
-    # Optional parameters
-    if "system_prompt" in params:
-        cmd.extend(["--system-prompt", params["system_prompt"]])
+    # Dynamically map all keys from the notification to command-line flags
+    for key, value in params.items():
+        flag = f"--{key.replace('_', '-')}"
 
-    # Pass other options via JSON
-    if "options" in params and isinstance(params["options"], dict):
-        cmd.extend(["--options-json", json.dumps(params["options"])])
+        # For boolean flags (like --list-models), just add the flag if True
+        if isinstance(value, bool) and value:
+            cmd.append(flag)
+        # For all other types, add the flag and its value
+        elif not isinstance(value, bool):
+            cmd.append(flag)
+            cmd.append(str(value))
 
     return cmd
 

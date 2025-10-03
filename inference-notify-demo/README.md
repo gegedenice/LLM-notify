@@ -2,7 +2,7 @@
 
 This demo showcases a distributed, notification-driven architecture for running LLM inference tasks. It uses a W3C Linked Data Notifications (LDN) inbox to receive jobs and an orchestrator to trigger an OpenAI-compatible inference client.
 
-This approach decouples the requestor from the inference service, allowing for a scalable, auditable, and asynchronous AI workflow. All scripts are designed to be run remotely via `uv`, requiring no local installation.
+This approach decouples the requestor from the inference service, allowing for a scalable, auditable, and asynchronous AI workflow. All scripts are designed to be run remotely via `uv`, requiring no local installation. For auditability, every parameter of an inference job is stored in the notification message.
 
 ## Project Structure
 
@@ -12,7 +12,7 @@ inference-notify-demo/
  ├─ inbox_server.py         # Simple LDN inbox server, also serves results
  ├─ poll_and_run.py         # Orchestrator: polls inbox and runs inference
  ├─ inference.py            # Universal inference client (OpenAI, Groq, etc.)
- ├─ send_ldn.py             # Client to send an inference job notification
+ ├─ send_ldn.py             # Client to send a detailed inference job notification
  └─ state/                  # Outputs from the demo (inbox messages, results)
 ```
 
@@ -32,19 +32,32 @@ It will start listening on `http://localhost:8080`. The inbox is at `/inbox`.
 
 ### 2. Send an Inference Job Notification (Terminal B)
 
-This command constructs and sends a job notification to the inbox.
+Use the `send_ldn.py` script to construct and send a detailed job notification to the inbox. It supports all the arguments of the `inference.py` script, allowing for fine-grained control over the job.
 
+**Basic Example:**
 ```bash
 uv run https://raw.githubusercontent.com/gegedenice/LLM-notify/main/inference-notify-demo/send_ldn.py \
   --inbox http://localhost:8080/inbox \
   --provider "groq" \
   --model "llama3-8b-8192" \
-  --user-prompt "Explain the importance of the W3C Linked Data Notifications standard in 3 sentences."
+  --user-prompt "Explain the W3C Linked Data Notifications standard in 3 sentences."
+```
+
+**Advanced Example with more parameters:**
+```bash
+uv run https://raw.githubusercontent.com/gegedenice/LLM-notify/main/inference-notify-demo/send_ldn.py \
+  --inbox http://localhost:8080/inbox \
+  --provider "groq" \
+  --model "llama3-8b-8192" \
+  --user-prompt "Write a short poem about asynchronous microservices." \
+  --system-prompt "You are a poet who is also a distributed systems expert." \
+  --temperature 0.8 \
+  --max-tokens 100
 ```
 
 ### 3. Launch the Orchestrator (Terminal C)
 
-The orchestrator polls the inbox, finds the new job, and executes the remote `inference.py` script with the parameters from the notification.
+The orchestrator polls the inbox, finds the new job, and executes the remote `inference.py` script, dynamically building the command from all parameters in the notification.
 
 **Before running, ensure you have set the required API key for your chosen provider (e.g., `GROQ_API_KEY`).**
 
@@ -57,7 +70,7 @@ INBOX_URL=http://localhost:8080/inbox \
 uv run https://raw.githubusercontent.com/gegedenice/LLM-notify/main/inference-notify-demo/poll_and_run.py
 ```
 
-The orchestrator will detect the notification and run the inference. The result will be saved as a `.txt` file in the `state/` directory, and a final "Announce" notification will be sent to the inbox, confirming the completion of the task. You can view the result at a URL like `http://localhost:8080/state/inference-result-....txt`.
+The result will be saved as a `.txt` file in the `state/` directory, and a final "Announce" notification will be sent to the inbox. You can view the result at a URL like `http://localhost:8080/state/inference-result-....txt`.
 
 ### Production Note: Versioning
 
