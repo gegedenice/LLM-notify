@@ -37,6 +37,8 @@ def get_message_id(message: dict) -> str:
 # --- Notification Helpers ---
 def post_announce(object_name, file_path, generating_activity):
     """Posts an 'Announce' notification to the inbox about a generated resource."""
+    base_url = INBOX_URL.rsplit('/', 1)[0]
+    object_url = f"{base_url}/{STATE_DIR}/{object_name}"
     payload = {
         "@context": ["https://www.w3.org/ns/activitystreams", "https://www.w3.org/ns/prov#"],
         "type": "Announce",
@@ -45,7 +47,7 @@ def post_announce(object_name, file_path, generating_activity):
             "type": "Document",
             "id": f"urn:smartbibl:state:{object_name}",
             "name": object_name,
-            "url": f"file://{os.path.abspath(file_path)}"
+            "url": object_url
         },
         "prov:wasGeneratedBy": generating_activity
     }
@@ -67,7 +69,7 @@ def run_command(command):
 
 def build_inference_command(params: dict) -> list[str]:
     """Builds the command to execute the inference script from notification parameters."""
-    cmd = ["uv", "run", "inference.py"]
+    cmd = ["uv", "run", "https://raw.githubusercontent.com/gegedenice/LLM-notify/main/inference-notify-demo/inference.py"]
     # Required parameters
     cmd.extend(["--provider", params["provider"]])
     cmd.extend(["--model", params["model"]])

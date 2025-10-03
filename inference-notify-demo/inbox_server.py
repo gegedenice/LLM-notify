@@ -4,11 +4,13 @@
 # ///
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import json, time
 
 app = FastAPI(title="LDN Inbox (POC)")
 INBOX = Path("state/inbox"); INBOX.mkdir(parents=True, exist_ok=True)
+app.mount("/state", StaticFiles(directory="state"), name="state")
 
 @app.post("/inbox")
 async def inbox_post(req: Request):
