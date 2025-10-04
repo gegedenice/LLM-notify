@@ -49,10 +49,10 @@ uv run https://raw.githubusercontent.com/gegedenice/LLM-notify/main/inference-no
   --inbox http://localhost:8080/inbox \
   --provider "groq" \
   --model "llama3-8b-8192" \
-  --user-prompt "Write a short poem about asynchronous microservices." \
-  --system-prompt "You are a poet who is also a distributed systems expert." \
-  --temperature 0.8 \
-  --max-tokens 100
+  --user-prompt "explain reranking in RAG." \
+  --system-prompt "You are an expert in IA systems." \
+  --temperature 0.1 \
+  --max-tokens 500
 ```
 
 ### 3. Launch the Orchestrator (Terminal C)

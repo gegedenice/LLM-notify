@@ -1,0 +1,18 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "urn:uuid:ef2eb8f0-ce9d-4559-9915-3ba91e759fb8",
+  "type": "Create",
+  "actor": "https://example.org/users/cli-user",
+  "object": {
+    "provider": "groq",
+    "model": "llama3-8b-8192",
+    "user_prompt": "Explain reranking in RAG.",
+    "system_prompt": "You are an expert in IA.",
+    "temperature": 0.1,
+    "max_tokens": 500
+  },
+  "instrument": {
+    "type": "Service",
+    "action": "infer"
+  }
+}
