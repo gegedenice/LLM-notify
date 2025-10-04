@@ -20,7 +20,6 @@ def main():
     # Core
     parser.add_argument("--provider", required=True, help="openai | groq | ollama | hf|huggingface")
     parser.add_argument("--model", required=True, help="Model name to use for inference.")
-    parser.add_argument("--api-key", help="API key (otherwise read from env).")
     parser.add_argument("--base-url", help="Override base URL for the provider.")
 
     # Provider-specific
