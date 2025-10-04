@@ -2,14 +2,18 @@
 # requires-python = ">=3.10"
 # dependencies = ["httpx>=0.27"]
 # ///
+# Ensure UTF-8 encoding for the entire script
+import sys
+import os
+os.environ['PYTHONIOENCODING'] = 'utf-8'
+
 import time
 import json
 import httpx
-import os
 import hashlib
 import subprocess
-import sys
 import uuid
+import io
 
 # --- Configuration ---
 INBOX_URL = os.getenv("INBOX_URL", "http://localhost:8080/inbox")
@@ -59,13 +63,32 @@ def post_announce(object_name, file_path, generating_activity):
 # --- Core Logic ---
 def run_command(command):
     """Executes a command, logs its output, and returns the captured stdout."""
-    print(f"→ Running command: {' '.join(command)}", file=sys.stderr)
-    process = subprocess.run(command, check=True, capture_output=True, text=True, encoding='utf-8')
-    if process.stdout:
-        print(process.stdout)
-    if process.stderr:
-        print(process.stderr, file=sys.stderr)
-    return process.stdout
+    print(f"Running command: {' '.join(command)}", file=sys.stderr)
+    
+    # Set environment variables to ensure UTF-8 encoding
+    env = os.environ.copy()
+    env['PYTHONIOENCODING'] = 'utf-8'
+    env['LC_ALL'] = 'C.UTF-8'
+    env['LANG'] = 'C.UTF-8'
+    
+    try:
+        process = subprocess.run(command, check=True, capture_output=True, text=True, encoding='utf-8', errors='replace', env=env)
+        if process.stdout:
+            print(process.stdout)
+        if process.stderr:
+            print(process.stderr, file=sys.stderr)
+        return process.stdout
+    except UnicodeDecodeError as e:
+        print(f"Unicode decode error: {e}", file=sys.stderr)
+        # Fallback: capture as bytes and decode with errors='replace'
+        process = subprocess.run(command, check=True, capture_output=True, env=env)
+        stdout_text = process.stdout.decode('utf-8', errors='replace')
+        stderr_text = process.stderr.decode('utf-8', errors='replace')
+        if stdout_text:
+            print(stdout_text)
+        if stderr_text:
+            print(stderr_text, file=sys.stderr)
+        return stdout_text
 
 def build_inference_command(params: dict) -> list[str]:
     """
