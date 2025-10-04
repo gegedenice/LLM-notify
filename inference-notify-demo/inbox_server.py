@@ -9,8 +9,11 @@ from pathlib import Path
 import json, time
 
 app = FastAPI(title="LDN Inbox (POC)")
-INBOX = Path("state/inbox"); INBOX.mkdir(parents=True, exist_ok=True)
-app.mount("/state", StaticFiles(directory="state"), name="state")
+# Use current working directory for state, not script location (since script runs from temp when remote)
+STATE_DIR = Path.cwd() / "state"
+INBOX = STATE_DIR / "inbox"
+INBOX.mkdir(parents=True, exist_ok=True)
+app.mount("/state", StaticFiles(directory=str(STATE_DIR)), name="state")
 
 @app.post("/inbox")
 async def inbox_post(req: Request):

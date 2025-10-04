@@ -17,7 +17,8 @@ import io
 
 # --- Configuration ---
 INBOX_URL = os.getenv("INBOX_URL", "http://localhost:8080/inbox")
-STATE_DIR = os.path.join(os.path.dirname(__file__), "state")
+# Use current working directory for state, not script location (since script runs from temp when remote)
+STATE_DIR = os.path.join(os.getcwd(), "state")
 SEEN_FILE = os.path.join(STATE_DIR, "seen.txt")
 os.makedirs(STATE_DIR, exist_ok=True)
 
