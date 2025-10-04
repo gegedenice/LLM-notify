@@ -22,12 +22,12 @@ def get_seen_ids():
     """Reads the set of seen message IDs from the state file."""
     if not os.path.exists(SEEN_FILE):
         return set()
-    with open(SEEN_FILE, "r") as f:
+    with open(SEEN_FILE, "r", encoding='utf-8') as f:
         return set(line.strip() for line in f)
 
 def mark_as_seen(message_id):
     """Marks a message ID as seen by appending it to the state file."""
-    with open(SEEN_FILE, "a") as f:
+    with open(SEEN_FILE, "a", encoding='utf-8') as f:
         f.write(message_id + "\n")
 
 def get_message_id(message: dict) -> str:
@@ -60,7 +60,7 @@ def post_announce(object_name, file_path, generating_activity):
 def run_command(command):
     """Executes a command, logs its output, and returns the captured stdout."""
     print(f"→ Running command: {' '.join(command)}", file=sys.stderr)
-    process = subprocess.run(command, check=True, capture_output=True, text=True)
+    process = subprocess.run(command, check=True, capture_output=True, text=True, encoding='utf-8')
     if process.stdout:
         print(process.stdout)
     if process.stderr:
@@ -124,7 +124,7 @@ def main():
                     result_id = str(uuid.uuid4())
                     result_filename = f"inference-result-{result_id}.txt"
                     result_filepath = os.path.join(STATE_DIR, result_filename)
-                    with open(result_filepath, "w") as f:
+                    with open(result_filepath, "w", encoding='utf-8') as f:
                         f.write(result_text)
 
                     print(f"Inference complete. Result saved to {result_filepath}", file=sys.stderr)
