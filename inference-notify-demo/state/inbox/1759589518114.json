@@ -1,0 +1,18 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "urn:uuid:bde3e011-8769-4ff5-926e-562476a96c9e",
+  "type": "Create",
+  "actor": "https://example.org/users/cli-user",
+  "object": {
+    "provider": "groq",
+    "model": "moonshotai/kimi-k2-instruct-0905",
+    "user_prompt": "explain reranking in RAG.",
+    "system_prompt": "You are an expert in IA systems.",
+    "temperature": 0.1,
+    "max_tokens": 500
+  },
+  "instrument": {
+    "type": "Service",
+    "action": "infer"
+  }
+}

@@ -13,7 +13,7 @@ import uuid
 
 # --- Configuration ---
 INBOX_URL = os.getenv("INBOX_URL", "http://localhost:8080/inbox")
-STATE_DIR = "state"
+STATE_DIR = os.path.join(os.path.dirname(__file__), "state")
 SEEN_FILE = os.path.join(STATE_DIR, "seen.txt")
 os.makedirs(STATE_DIR, exist_ok=True)
 
