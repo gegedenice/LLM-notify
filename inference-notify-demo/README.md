@@ -84,7 +84,7 @@ https://raw.githubusercontent.com/gegedenice/LLM-notify/a1b2c3d4/inference-notif
 ## Relation to the paper
 
 This demo is a working illustration of the ideas in
-[Distributed AI over Normalized Notifications (LDN)](https://vixra.org/pdf/2510.0040v1.pdf):
+[Toward a Transparent, Auditable, and Distributed Architecture for LLM Tasks Using W3C Linked Data Notifications and Remote uv Scripts](https://vixra.org/pdf/2510.0040v1.pdf):
 
 - **Create** messages carry a complete, explicit job description (all inference
   parameters are embedded in the notification’s `object`).

@@ -65,7 +65,7 @@ uv run https://raw.githubusercontent.com/gegedenice/uv-scripts/main/RAG-demo/que
 ## English overview
 
 This folder is a minimal, working illustration of the ideas in the paper
-[Distributed AI over Normalized Notifications (LDN)](https://vixra.org/pdf/2510.0040v1.pdf).
+[Toward a Transparent, Auditable, and Distributed Architecture for LLM Tasks Using W3C Linked Data Notifications and Remote uv Scripts](https://vixra.org/pdf/2510.0040v1.pdf).
 It demonstrates a distributed, notification-driven RAG pipeline where each
 processing step is a micro-service triggered by W3C Linked Data Notifications
 (LDN).
