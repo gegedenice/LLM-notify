@@ -39,7 +39,7 @@ Use the `send_ldn.py` script to construct and send a detailed job notification t
 uv run https://raw.githubusercontent.com/gegedenice/LLM-notify/main/inference-notify-demo/send_ldn.py \
   --inbox http://localhost:8080/inbox \
   --provider "groq" \
-  --model "llama3-8b-8192" \
+  --model "moonshotai/kimi-k2-instruct-0905" \
   --user-prompt "Explain the W3C Linked Data Notifications standard in 3 sentences."
 ```
 
@@ -48,7 +48,7 @@ uv run https://raw.githubusercontent.com/gegedenice/LLM-notify/main/inference-no
 uv run https://raw.githubusercontent.com/gegedenice/LLM-notify/main/inference-notify-demo/send_ldn.py \
   --inbox http://localhost:8080/inbox \
   --provider "groq" \
-  --model "llama3-8b-8192" \
+  --model "moonshotai/kimi-k2-instruct-0905" \
   --user-prompt "explain reranking in RAG." \
   --system-prompt "You are an expert in IA systems." \
   --temperature 0.1 \
